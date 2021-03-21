@@ -27,6 +27,7 @@
 <script>
 import {mapMutations} from 'vuex';
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 export default {
   data() {
@@ -52,9 +53,10 @@ export default {
           // // 将用户token保存到vuex中
           // _this.changeLogin({Authorization: _this.userToken});
           // _this.$router.push('/home');
-          alert('登陆成功');
+          ElMessage('登录成功！')
+          this.$router.replace('/')
         }).catch(error => {
-          alert('账号或密码错误');
+          ElMessage('账号或密码错误！')
           console.log(error);
         });
       }
@@ -65,7 +67,7 @@ export default {
 
 <style>
 .box-card {
-  width: 500px;
+  width: 80%;
   margin:0 auto;
 }
 .button{
