@@ -4,7 +4,7 @@
   <el-card class="box-card">
     <template #header>
     <div class="card-header">
-      <span>请填写你的预约信息哦～</span>
+      <span>请填写你的预约信息哦～ （看到此界面之后，请先刷新一下，有个未解bug）</span>
     </div>
       </template>
     <el-form label-position="left" :model="appointmentForm" :rules="rules" label-width="100px" class="demo-ruleForm" ref="appointmentForm">
@@ -27,7 +27,7 @@
         <el-date-picker v-model="appointmentForm.fixdate" type="date" placeholder="选择日期" style="width: 100%" :disabled-date="disabledDate">
         </el-date-picker>
       </el-form-item>
-      <p id="information" v-if="fixdate!==''"></p>
+      <p id="information"> </p>
       <el-form-item label="&nbsp;&nbsp;电脑型号" prop="model" style="width: auto">
         <el-input v-model="appointmentForm.model" placeholder="不清楚可不填"></el-input>
       </el-form-item>
@@ -64,11 +64,11 @@ export default {
     return {
       centerDialogVisible:false,
       appointmentForm: {
-        name: '',
+        name: '123',
         // fixtimeid: '',
         fixdate:'',
-        phone:'',
-        QQ:'',
+        phone:'12312312312',
+        QQ:'123123',
         schoolid:'',
         model:'',
         problemid:'',
@@ -103,7 +103,6 @@ export default {
         {
           if(this_.appointmentForm.schoolid==="1")
           { //南湖校区
-            console.log("111")
             return !(time.getDay() === 1 || time.getDay() === 2 || time.getDay() === 4);
           }
           else if(this_.appointmentForm.schoolid==="2")
@@ -130,7 +129,7 @@ export default {
             'schoolid':this.appointmentForm.schoolid,
             'model':this.appointmentForm.model,
             'problemid':this.appointmentForm.problemid,
-            'fixdate':this.appointmentForm.fixdate,
+            'fixdate':this.appointmentForm.fixdate.getFullYear()+"-"+(this.appointmentForm.fixdate.getMonth()+1)+"-"+this.appointmentForm.fixdate.getDate(),
             'description':this.appointmentForm.description
           }).then(r => {
             console.log(r.data)
@@ -147,6 +146,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      document.getElementById("information").innerHTML =''
     }
   },
   watch:{
@@ -163,16 +163,16 @@ export default {
     'appointmentForm.fixdate':{
       handler: function(newval,oldVal) {
         console.log(newval,oldVal)
-        // let this_ = this
         if(newval!=='')
-          document.getElementById("information").innerHTML = "您的时间和地点是："+this.appointmentForm.fixdate.getFullYear()+"年"+(this.appointmentForm.fixdate.getMonth()+1)+"月"+this.appointmentForm.fixdate.getDate()+"日 "+this.fixtimedata.filter(function (_data){
+          document.getElementById("information").innerHTML = "您选择的时间和地点是："+this.appointmentForm.fixdate.getFullYear()+"年"+(this.appointmentForm.fixdate.getMonth()+1)+"月"+this.appointmentForm.fixdate.getDate()+"日 "+this.fixtimedata.filter(function (_data){
             return _data.weekdayid===newval.getDay()
           })[0]["fixtimestring"]
       }
     }
   },
   mounted() {
-    axios.get("/api/GetFixTimes").then(r => { //获取维修时间信息
+    console.log("yeyeye")
+    axios.get("/api/GetFixTimes").then((r) => { //获取维修时间信息
       this.fixtimedata = r.data
     }).catch(error => {
       console.log(error)
