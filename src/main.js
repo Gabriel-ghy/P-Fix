@@ -2,7 +2,7 @@ import store from './store/main';
 import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
-import ElementPlus from 'element-plus';
+import ElementPlus, {ElMessage} from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
 import axios from "axios";
 
@@ -33,7 +33,8 @@ axios.interceptors.response.use(
         if(error.response){
             switch(error.response.status){
                 case 401:
-                    this.$store.commit('delToken');
+                    store.commit('delToken');
+                    ElMessage('登录验证失败或登录超时');
                     router.replace({ //跳转到登录页面
                         path: '/Login',
                         query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
